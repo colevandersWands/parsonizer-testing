@@ -1,30 +1,13 @@
-Parsons Programming Puzzles
-==========================
+# The [Parsonizer](https://janke-learning.github.io/parsonizer/)
 
-Parsons programming puzzles are a type of scaffolded program construction tasks where the learner is given a set of code
-fragments, blocks of a single or multiple lines of code, and the task is to piece together a program from these.
+Parsons problems are designed to help you study snippets of code without getting bogged down in errors and syntax.  Simply paste in the code you want to study, and the parsonizer will shuffle the lines.  Your task is to place them in order.  But it's not always as easy as it sounds!  Beware of indenting (code style) and extra lines.
 
-In js-parsons, learners not only select and order but also indent code fragments. This variant of Parsons programming 
-puzzles is called two-dimensional (2D) Parsons problems. In Python, code indentation has a semantic meaning, as an 
-indented statement falls into the surrounding control structure, which has lower  indentation. That is, code blocks 
-are deﬁned by indentation instead of start and end symbols like curly braces. 
+When you find a particularly interesting example of JavaScript syntax, design pattern, solution strategy, copy paste it into [this web page](https://janke-learning.github.io/parsonizer/) to study it in depth as a parsons problem.
 
-Publications based on js-parsons
---------------------------------
+Parsons problems are a great way to practice syntax, logical strategies, and programming design patterns. 
 
-Petri Ihantola and Ville Karavirta. [Two-Dimensional Parson's Puzzles: The Concept, Tools, and First Observations] (http://www.jite.org/documents/Vol10/JITEv10IIPp119-132Ihantola944.pdf). Journal of Information Technology Education: Innovations in Practice, 10:1–14, 2011.
+> Powered by [js-parsons](https://github.com/js-parsons/js-parsons) 
 
-Juha Helminen, Petri Ihantola, Ville Karavirta, and Lauri Malmi. 2012. How do students solve parsons programming problems?: an analysis of interaction traces. In Proceedings of the ninth annual international conference on International computing education research (ICER '12). ACM, New York, NY, USA, 119-126. [DOI=10.1145/2361276.2361300](http://doi.acm.org/10.1145/2361276.2361300)
-
-Ville Karavirta, Juha Helminen, and Petri Ihantola. 2012. A mobile learning application for parsons problems with automatic feedback. In Proceedings of the 12th Koli Calling International Conference on Computing Education Research (Koli Calling '12). ACM, New York, NY, USA, 11-18. [DOI=10.1145/2401796.2401798](http://doi.acm.org/10.1145/2401796.2401798)
-
-Juha Helminen, Petri Ihantola, Ville Karavirta, and Satu Alaoutinen. 2013. How Do Students Solve Parsons Programming Problems? -- Execution-Based vs. Line-Based Feedback. In Proceedings of Learning and Teaching in Computing and Engineering (LaTiCE), 2013  [DOI=10.1109/LaTiCE.2013.26](http://dx.doi.org/10.1109/LaTiCE.2013.26)
-
-
-Authors
--------
-
-* Ville Karavirta
-* Petri Ihantola
-* Juha Helminen
-* Mike Hewner
+___
+___
+### <a href="http://janke-learning.org" target="_blank"><img src="https://user-images.githubusercontent.com/18554853/50098409-22575780-021c-11e9-99e1-962787adaded.png" width="40" height="40"></img> Janke Learning</a>
