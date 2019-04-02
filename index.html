@@ -29,12 +29,18 @@
         <div id="control-panel"></div>
         <br>
         <div>
+          run code in: 
+            <button onclick="current_challenge = current_challenge || read_challenge_textarea(); copy_to_clipboard(current_challenge); alert('copied snippet. open your console and paste it in')">console</button>
+            <button onclick="current_challenge = current_challenge || read_challenge_textarea(); open_in_pytut();">python tutor</button>
+            <br>
+          edit code in:
+            <button onclick="current_challenge = current_challenge || read_challenge_textarea(); open_in_blockit();">block it</button> 
+            <br>
           study snippet in:
-          <button onclick="current_challenge = current_challenge || read_challenge_textarea(); open_in_blockit();">block it</button> 
-          <button onclick="current_challenge = current_challenge || read_challenge_textarea(); open_in_flowviz();">flow viz</button> 
-          <button onclick="current_challenge = current_challenge || read_challenge_textarea(); open_in_pytut();">python tutor</button> 
-          <br>
-          <button onclick="current_challenge = current_challenge || read_challenge_textarea(); copy_to_clipboard(current_challenge); alert('copied snippet')">copy snippet for console</button>           
+            <button onclick="current_challenge = current_challenge || read_challenge_textarea(); open_in_flowviz();">flow viz</button> 
+            <button onclick="current_challenge = current_challenge || read_challenge_textarea(); open_in('spot');">spot</button> 
+            <button onclick="current_challenge = current_challenge || read_challenge_textarea(); open_in('linter');">linter</button> 
+            <br>           
           <button id="gen-perma" onclick="current_challenge = current_challenge || read_challenge_textarea(); var url = generate_permalink(current_challenge, encode_challenge, 'parsonizer'); display_permalink(url); copy_to_clipboard(url); alert('copied permalink')">generate permalink:</button>
           <input id="display-perma"></input><br>
 
@@ -168,9 +174,8 @@ function reverstring(str) {
         <script src="./permalinking/scripts.js"></script>
         <script src="./permalinking/init-from-permalink.js"></script>
 
-        <script src="./open-in-flowviz.js"></script>
         <script src="./open-in-pytut.js"></script>
-        <script src="./open-in-blockit.js"></script>
+        <script src="./open-in.js"></script>
 
         <script src="./copy-to-clipboard.js"></script>
     </body>
