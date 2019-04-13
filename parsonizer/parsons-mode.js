@@ -41,6 +41,13 @@ function parsons_buttons() {
   history_button.onclick = update_modal;
   history_button.appendChild(modal_link);
 
+  var log_solution_button = document.createElement("button");
+  log_solution_button.innerHTML = "log solution";
+  log_solution_button.onclick = function() { 
+                              console.log( editor.getValue() ); 
+                              alert('inspect page to see the solution');
+                            };
+
   var edit_button = document.createElement("button");
   edit_button.id = "edit";
   edit_button.innerHTML = "change snippet";
@@ -50,6 +57,7 @@ function parsons_buttons() {
   parsons_buttons.appendChild(re_shuffle_button);
   parsons_buttons.appendChild(get_feedback_button);
   parsons_buttons.appendChild(history_button);
+  parsons_buttons.appendChild(log_solution_button);
   parsons_buttons.appendChild(document.createElement("br"));
   parsons_buttons.appendChild(edit_button);
 
