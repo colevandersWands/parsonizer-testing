@@ -5,14 +5,18 @@ function parsons_mode() {
   parsons_zone.style = "block";
 
   var control_panel = document.getElementById('control-panel');
-  while(control_panel.firstChild){
-      control_panel.removeChild(control_panel.firstChild);
+  while (control_panel.firstChild) {
+    control_panel.removeChild(control_panel.firstChild);
   };
   var new_buttons = parsons_buttons();
   control_panel.appendChild(new_buttons);
 
   var snippet = editor.getValue();
-  parsons_instance = init(snippet);
+  var prettier_snippet = prettier.format(snippet, {
+    parser: "babylon",
+    plugins: prettierPlugins
+  })
+  parsons_instance = init(prettier_snippet);
   init_modal(snippet);
 }
 
@@ -27,9 +31,9 @@ function parsons_buttons() {
   var get_feedback_button = document.createElement("button");
   get_feedback_button.id = "feedbackLink";
   get_feedback_button.innerHTML = "Get Feedback";
-  get_feedback_button.onclick = function(){
-                              setTimeout(save_guess, 0);
-                            };
+  get_feedback_button.onclick = function () {
+    setTimeout(save_guess, 0);
+  };
 
 
   var modal_link = document.createElement("a");
@@ -43,10 +47,10 @@ function parsons_buttons() {
 
   var log_solution_button = document.createElement("button");
   log_solution_button.innerHTML = "log solution";
-  log_solution_button.onclick = function() { 
-                              console.log( editor.getValue() ); 
-                              alert('inspect page to see the solution');
-                            };
+  log_solution_button.onclick = function () {
+    console.log(editor.getValue());
+    alert('inspect page to see the solution');
+  };
 
   var edit_button = document.createElement("button");
   edit_button.id = "edit";

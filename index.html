@@ -1,105 +1,114 @@
-
 <!doctype html>
 <html>
-    <head>
-        <title>Parsonizer</title>
-        <!-- Don't touch these things -->
-        <link href="./js-parsons/parsons.css" rel="stylesheet" />
-        <link href="./js-parsons/lib/prettify.css" rel="stylesheet" />
 
-        <script src="./js-parsons/lib/prettify.js"></script>
-        <script src="./js-parsons/include.js"></script>
+<head>
+  <title>Parsonizer</title>
+  <!-- Don't touch these things -->
+  <link href="./js-parsons/parsons.css" rel="stylesheet" />
+  <link href="./js-parsons/lib/prettify.css" rel="stylesheet" />
 
-        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="./js-parsons/lib/prettify.js"></script>
+  <script src="./js-parsons/include.js"></script>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
 
-        <link href="./guesses-history/modal.css" rel="stylesheet" />
-        <script src="./guesses-history/scripts.js"></script>
-        <script src="./guesses-history/global-vars.js"></script>
-    </head>
-    <body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-        <!-- what you see -->
-        <div id='parsons-zone'>
-          <div id="sortableTrash" class="sortable-code"></div>
-          <div id="sortable" class="sortable-code"></div>
-          <div style="clear:both;"></div>
-        </div>
-        <div id="editor" style="position: relative; width: 800px; height: 400px;"></div>
-        <div id="control-panel"></div>
-        <br>
-        <br>
-        <div>
-          <div>
-            run it: <button onclick="open_in_pytut();">in python tutor</button> <button onclick="copy_it();">in console</button> <br>
-            edit in: <button onclick="open_in('blockit');">block it</button> <Br>
-            study it with: <button onclick="open_in('spot');">spot</button> 
-            <button onclick="open_in('shuffle');">shuffle</button> 
-            <button onclick="open_in('linter');">linter</button> 
-            <button onclick="open_in('flowviz');">flow viz</button> 
-            <br>           
-            <button id="gen-perma" onclick="gen_permalink();">generate permalink:</button>
-            <input id="display-perma"></input><br>
-          </div>
-          <ul>
-            <li>paste your code in the textarea above and click the [parsonize your code] button to create a study challenge </li>
-            <li>the first line needs to be all the way to the left </li>
-            <li>you can add un-necessary lines by typing '#distractor' after them </li>
-            <li>about parsons problems: <a target="_blank" href="https://computinged.wordpress.com/2017/11/17/parsons-problems-have-same-learning-gains-as-writing-or-fixing-code-in-less-time-koli-calling-2017-preview/">all of the learning, less of the time time</a>.</li>
-            <li>new permalinks will open to the code in the textarea. If the textarea is empty, it will open to the current parsons problem</li>
-          </ul>
-        </div>
-        <hr>
-        <h4>examples</h4>
-        <div>
-          <p><b>simple script -></b> drag them into the correct order</p>
-          <pre class="prettyprint">
+  <link href="./guesses-history/modal.css" rel="stylesheet" />
+  <script src="./guesses-history/scripts.js"></script>
+  <script src="./guesses-history/global-vars.js"></script>
+
+  <script src="https://unpkg.com/prettier@1.13.0/standalone.js"></script>
+  <script src="https://unpkg.com/prettier@1.13.0/parser-babylon.js"></script>
+</head>
+
+<body>
+
+  <!-- what you see -->
+  <div id='parsons-zone'>
+    <div id="sortableTrash" class="sortable-code"></div>
+    <div id="sortable" class="sortable-code"></div>
+    <div style="clear:both;"></div>
+  </div>
+  <div id="editor" style="position: relative; width: 800px; height: 400px;"></div>
+  <div id="control-panel"></div>
+  <br>
+  <br>
+  <div>
+    <div>
+      run it: <button onclick="open_in_pytut();">in python tutor</button> <button onclick="copy_it();">in
+        console</button> <br>
+      edit in: <button onclick="open_in('blockit');">block it</button> <Br>
+      study it with: <button onclick="open_in('spot');">spot</button>
+      <button onclick="open_in('shuffle');">shuffle</button>
+      <button onclick="open_in('linter');">linter</button>
+      <button onclick="open_in('flowviz');">flow viz</button>
+      <br>
+      <button id="gen-perma" onclick="gen_permalink();">generate permalink:</button>
+      <input id="display-perma"></input><br>
+    </div>
+    <ul>
+      <li>paste your code in the textarea above and click the [parsonize your code] button to create a study challenge
+      </li>
+      <li>the first line needs to be all the way to the left </li>
+      <li>you can add un-necessary lines by typing '#distractor' after them </li>
+      <li>about parsons problems: <a target="_blank"
+          href="https://computinged.wordpress.com/2017/11/17/parsons-problems-have-same-learning-gains-as-writing-or-fixing-code-in-less-time-koli-calling-2017-preview/">all
+          of the learning, less of the time time</a>.</li>
+      <li>new permalinks will open to the code in the textarea. If the textarea is empty, it will open to the current
+        parsons problem</li>
+    </ul>
+  </div>
+  <hr>
+  <h4>examples</h4>
+  <div>
+    <p><b>simple script -></b> drag them into the correct order</p>
+    <pre class="prettyprint">
 const a = "1";
 const b = "2";
 const c = a + b;
           </pre>
-        </div>
-        <div>
-          <p><b>careful! -></b> the parsonizer won't work if your first line is indented</p>
-          <pre class="prettyprint">
+  </div>
+  <div>
+    <p><b>careful! -></b> the parsonizer won't work if your first line is indented</p>
+    <pre class="prettyprint">
   const a = "1";
 const b = "2";
 const c = a + b;
           </pre>
-        </div>
-        <div>
-          <p><b>a basic if/else  -></b> drop the indented lines at the correct depth</p>
-          <pre class="prettyprint">
+  </div>
+  <div>
+    <p><b>a basic if/else -></b> drop the indented lines at the correct depth</p>
+    <pre class="prettyprint">
 if (null) {
   console.log('never');
 } else {
   console.log('always');
 };
           </pre>
-        </div>
-        <div>
-          <p><b>nested if's -></b> drop the doubly indented line twice as far in</p>
-          <pre class="prettyprint">
+  </div>
+  <div>
+    <p><b>nested if's -></b> drop the doubly indented line twice as far in</p>
+    <pre class="prettyprint">
 if (true) {
   if (false) {
     console.log('never');
   }; // inner
 }; // outer
           </pre>
-        </div>
-        <div>
-          <p><b>for loop with return -></b> up the challenge by adding extra lines </p>
-          <pre class="prettyprint">
+  </div>
+  <div>
+    <p><b>for loop with return -></b> up the challenge by adding extra lines </p>
+    <pre class="prettyprint">
 for (let i = 0; i < 4; i++) {
   i++;
   return i; #distractor
 };
           </pre>
-        </div>
-        <div>
-          <p><b>programming challenges -></b> practice the logic without the errors</p>
-          <pre class="prettyprint">
+  </div>
+  <div>
+    <p><b>programming challenges -></b> practice the logic without the errors</p>
+    <pre class="prettyprint">
 function reverstring(str) {
   const arrayed = str.split("");
   const reversed = arrayed.reverse();
@@ -107,82 +116,90 @@ function reverstring(str) {
   return re_stringed;
 };
           </pre>
-        </div>
-        <br/>
-        <hr>
-        <p> <a href="https://github.com/janke-learning/parsonizer" target="_blank">parsonizer source code</a>, powered by <a href="https://github.com/js-parsons/js-parsons" target="_blank">  js-parsons </a>
-        <br>
-        <hr>  
-        <hr>  
-        <a href="http://janke-learning.org" target="_blank"><img src="https://user-images.githubusercontent.com/18554853/50098409-22575780-021c-11e9-99e1-962787adaded.png" width="40" height="40"></img> Janke Learning</a>  
+  </div>
+  <br />
+  <hr>
+  <p> <a href="https://github.com/janke-learning/parsonizer" target="_blank">parsonizer source code</a>, powered by <a
+      href="https://github.com/js-parsons/js-parsons" target="_blank"> js-parsons </a>
+    <br>
+    <hr>
+    <hr>
+    <a href="http://janke-learning.org" target="_blank"><img
+        src="https://user-images.githubusercontent.com/18554853/50098409-22575780-021c-11e9-99e1-962787adaded.png"
+        width="40" height="40"></img> Janke Learning</a>
 
-        <!-- begin guess history modal -->
+    <!-- begin guess history modal -->
 
-        <div id="guesses-history" style="display:none; overflow-y: hidden;">
-          <div style="padding-right: 5%; padding-left: 5%; padding-bottom: 5%; overflow-y: hidden;">
-            <div>
-              <pre id="the-answer" class="prettyprint">
+    <div id="guesses-history" style="display:none; overflow-y: hidden;">
+      <div style="padding-right: 5%; padding-left: 5%; padding-bottom: 5%; overflow-y: hidden;">
+        <div>
+          <pre id="the-answer" class="prettyprint">
 // no challenge loaded
-              </pre>  
-            </div>
-            <div >
-              <div id="the-guesses" style="height: 75vh; width: 100vh; overflow-y: auto">
-                no guesses yet 
-              </div>
-            </div>
+              </pre>
+        </div>
+        <div>
+          <div id="the-guesses" style="height: 75vh; width: 100vh; overflow-y: auto">
+            no guesses yet
           </div>
         </div>
+      </div>
+    </div>
 
 
-        <div class="modal" style="overflow-y: hidden;">
-          <div class="modal-inner" style="height: 100%; width: 100%; overflow-y: hidden;">
-            <a data-modal-close>X</a>
-            <div class="modal-content" style="overflow-y: hidden;"></div>
-          </div>
-        </div>
+    <div class="modal" style="overflow-y: hidden;">
+      <div class="modal-inner" style="height: 100%; width: 100%; overflow-y: hidden;">
+        <a data-modal-close>X</a>
+        <div class="modal-content" style="overflow-y: hidden;"></div>
+      </div>
+    </div>
 
-        <script src="./guesses-history/modal.js"></script>
-        <script>var modal = new VanillaModal.default();</script>
+    <script src="./guesses-history/modal.js"></script>
+    <script>var modal = new VanillaModal.default();</script>
 
-        <!-- end guess history modal -->
+    <!-- end guess history modal -->
 
-        <!-- why it works -->      
-        <script src="./js-parsons/lib/jquery.min.js"></script>
-        <script src="./js-parsons/lib/jquery-ui.min.js"></script>
-        <script src="./js-parsons/lib/jquery.ui.touch-punch.min.js"></script>
-        <script src="./js-parsons/lib/underscore-min.js"></script>
-        <script src="./js-parsons/lib/lis.js"></script>
-        <script src="./js-parsons/parsons.js"></script> 
+    <!-- why it works -->
+    <script src="./js-parsons/lib/jquery.min.js"></script>
+    <script src="./js-parsons/lib/jquery-ui.min.js"></script>
+    <script src="./js-parsons/lib/jquery.ui.touch-punch.min.js"></script>
+    <script src="./js-parsons/lib/underscore-min.js"></script>
+    <script src="./js-parsons/lib/lis.js"></script>
+    <script src="./js-parsons/parsons.js"></script>
 
-        <script src="./parsonizer/init.js"></script>  
-        <script src="./parsonizer/change-mode.js"></script>  
-        <script src="./parsonizer/parsons-mode.js"></script>  
+    <script src="./parsonizer/init.js"></script>
+    <script src="./parsonizer/change-mode.js"></script>
+    <script src="./parsonizer/parsons-mode.js"></script>
 
-        <script src="./linking/ctr-c.js"></script>
-        <script src="./linking/open-in-pytut.js"></script>
-        <script src="./linking/permalinking.js"></script>
+    <script src="./linking/ctr-c.js"></script>
+    <script src="./linking/open-in-pytut.js"></script>
+    <script src="./linking/permalinking.js"></script>
 
-        <script src="./ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./ace/ace.js" type="text/javascript" charset="utf-8"></script>
 
-        <script>
+    <script>
 
-          var editor = ace.edit("editor");
+      var editor = ace.edit("editor");
 
-          editor.setTheme('ace/theme/chrome');
-          editor.setFontSize(15);
-          editor.getSession().setMode('ace/mode/javascript');
-          editor.getSession().setTabSize(2);
-         
-          var query = read_snippet_query();
-          if (query) {
-            editor.setValue(query);
-            parsons_mode();
-          } else {
-            snippet = 'if (false) {\n  console.log("never");\n}';
-            editor.setValue(snippet);
-            change_mode();
-          };
+      editor.setTheme('ace/theme/chrome');
+      editor.setFontSize(15);
+      editor.getSession().setMode('ace/mode/javascript');
+      editor.getSession().setTabSize(2);
 
-        </script>
-    </body>
+      var query = read_snippet_query();
+      if (query) {
+        // https://prettier.io/blog/2018/05/27/1.13.0.html
+        editor.setValue(prettier.format(query, {
+          parser: "babylon",
+          plugins: prettierPlugins
+        }));
+        parsons_mode();
+      } else {
+        snippet = 'if (false) {\n  console.log("never");\n}';
+        editor.setValue(snippet);
+        change_mode();
+      };
+
+    </script>
+</body>
+
 </html>
