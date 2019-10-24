@@ -12,12 +12,15 @@ function parsons_mode() {
   control_panel.appendChild(new_buttons);
 
   var snippet = editor.getValue();
+
   var prettier_snippet = prettier.format(snippet, {
     parser: "babylon",
     plugins: prettierPlugins
-  })
+  });
+
   parsons_instance = init(prettier_snippet);
-  init_modal(snippet);
+  init_modal(prettier_snippet);
+
 }
 
 
@@ -45,12 +48,12 @@ function parsons_buttons() {
   history_button.onclick = update_modal;
   history_button.appendChild(modal_link);
 
-  var log_solution_button = document.createElement("button");
-  log_solution_button.innerHTML = "log solution";
-  log_solution_button.onclick = function () {
-    console.log(editor.getValue());
-    alert('inspect page to see the solution');
-  };
+  // var log_solution_button = document.createElement("button");
+  // log_solution_button.innerHTML = "log solution";
+  // log_solution_button.onclick = function () {
+  //   console.log(editor.getValue());
+  //   alert('inspect page to see the solution');
+  // };
 
   var edit_button = document.createElement("button");
   edit_button.id = "edit";
@@ -61,7 +64,7 @@ function parsons_buttons() {
   parsons_buttons.appendChild(re_shuffle_button);
   parsons_buttons.appendChild(get_feedback_button);
   parsons_buttons.appendChild(history_button);
-  parsons_buttons.appendChild(log_solution_button);
+  // parsons_buttons.appendChild(log_solution_button);
   parsons_buttons.appendChild(document.createElement("br"));
   parsons_buttons.appendChild(edit_button);
 

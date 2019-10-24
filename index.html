@@ -14,12 +14,76 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+  <script src="./prism/script.js"></script>
+  <link rel="stylesheet" type="text/css" href="./prism/style.css">
+
   <link href="./guesses-history/modal.css" rel="stylesheet" />
   <script src="./guesses-history/scripts.js"></script>
   <script src="./guesses-history/global-vars.js"></script>
 
-  <script src="https://unpkg.com/prettier@1.13.0/standalone.js"></script>
+  <script src='./exercises/loader.js'></script>
+
+  <!-- michiel! -->
+  <!-- <script src='beautify.js'></script> -->
+
+  <!-- why won't local parser-babylon work -->
+  <script src="./prettier/standalone.js"></script>
+  <!-- <script src="https://unpkg.com/prettier@1.13.0/standalone.js"></script> -->
+  <!-- <script src="./prettier/parser-babylon.js"></script> -->
   <script src="https://unpkg.com/prettier@1.13.0/parser-babylon.js"></script>
+
+  <script>
+    const LastSlashIndex = window.location.href.lastIndexOf('/');
+    var href = window.location.href.substr(0, LastSlashIndex);
+
+    window.onload = () => {
+      // this needs an overhaul, see tdd site
+      var query = read_snippet_query();
+      if (query) {
+        // https://prettier.io/blog/2018/05/27/1.13.0.html
+        editor.setValue(prettier.format(query, {
+          parser: "babylon",
+          plugins: prettierPlugins
+        }));
+        loader.cache[''] = query;
+        parsons_mode();
+      } else {
+        editor.setValue(loader.cache['']);
+        change_mode();
+      };
+
+
+      setTests('');
+
+      const prettyCode = prettier.format(
+        loader.cache[''],
+        {
+          parser: "babylon",
+          plugins: prettierPlugins
+        }
+      );
+
+      editor.setValue(prettyCode);
+      setTests(prettyCode)
+    }
+    // window.addEventListener('popstate', function (e) {
+    //   loadFromURL(href);
+    //   runTests();
+    // });
+    function setTests(code) {
+      const prettyCode = prettier.format(
+        code,
+        {
+          parser: "babylon",
+          plugins: prettierPlugins
+        }
+      );
+
+      const testCasesPrismed = document.getElementById('test-cases');
+      testCasesPrismed.innerHTML = prettyCode;
+      Prism.highlightAllUnder(testCasesPrismed);
+    }
+  </script>
 </head>
 
 <body>
@@ -32,33 +96,42 @@
   </div>
   <div id="editor" style="position: relative; width: 800px; height: 400px;"></div>
   <div id="control-panel"></div>
-  <br>
-  <br>
   <div>
-    <div>
-      run it: <button onclick="open_in_pytut();">in python tutor</button> <button onclick="copy_it();">in
-        console</button> <br>
-      edit in: <button onclick="open_in('blockit');">block it</button> <Br>
-      study it with: <button onclick="open_in('spot');">spot</button>
-      <button onclick="open_in('shuffle');">shuffle</button>
-      <button onclick="open_in('linter');">linter</button>
-      <button onclick="open_in('flowviz');">flow viz</button>
-      <br>
-      <button id="gen-perma" onclick="gen_permalink();">generate permalink:</button>
-      <input id="display-perma"></input><br>
+
+    <div style='display:flex;flex-direction: row;justify-content:space-between'>
+      <!-- <div style='display:flex;flex-direction: row;'> -->
+      <div>
+        <br><br>
+        run it: <button onclick="open_in_pytut();">in python tutor</button> <button onclick="copy_it();">in
+          console</button> <br>
+        edit in: <button onclick="open_in('blockit');">block it</button> <Br>
+        study it with: <button onclick="open_in('spot');">spot</button>
+        <button onclick="open_in('shuffle');">shuffle</button>
+        <button onclick="open_in('linter');">linter</button>
+        <button onclick="open_in('flowviz');">flow viz</button>
+        <br>
+        <button id="gen-perma" onclick="gen_permalink();">generate permalink:</button>
+        <input id="display-perma"></input><br>
+      </div>
+      <div>
+        <!-- why no style -->
+        <pre><code id='test-cases' class="language-js"></code></pre>
+      </div>
     </div>
-    <ul>
-      <li>paste your code in the textarea above and click the [parsonize your code] button to create a study challenge
-      </li>
-      <li>the first line needs to be all the way to the left </li>
-      <li>you can add un-necessary lines by typing '#distractor' after them </li>
-      <li>about parsons problems: <a target="_blank"
-          href="https://computinged.wordpress.com/2017/11/17/parsons-problems-have-same-learning-gains-as-writing-or-fixing-code-in-less-time-koli-calling-2017-preview/">all
-          of the learning, less of the time time</a>.</li>
-      <li>new permalinks will open to the code in the textarea. If the textarea is empty, it will open to the current
-        parsons problem</li>
-    </ul>
   </div>
+  <ul>
+    <li>paste your code in the textarea above and click the [parsonize your code] button to create a study
+      challenge
+    </li>
+    <li>the first line needs to be all the way to the left </li>
+    <li>you can add un-necessary lines by typing '#distractor' after them </li>
+    <li>about parsons problems: <a target="_blank"
+        href="https://computinged.wordpress.com/2017/11/17/parsons-problems-have-same-learning-gains-as-writing-or-fixing-code-in-less-time-koli-calling-2017-preview/">all
+        of the learning, less of the time time</a>.</li>
+    <li>new permalinks will open to the code in the textarea. If the textarea is empty, it will open to the
+      current
+      parsons problem</li>
+  </ul>
   <hr>
   <h4>examples</h4>
   <div>
@@ -126,7 +199,7 @@ function reverstring(str) {
     <hr>
     <a href="http://janke-learning.org" target="_blank"><img
         src="https://user-images.githubusercontent.com/18554853/50098409-22575780-021c-11e9-99e1-962787adaded.png"
-        width="40" height="40"></img> Janke Learning</a>
+        width="40" height="40" /> Janke Learning</a>
 
     <!-- begin guess history modal -->
 
@@ -135,7 +208,7 @@ function reverstring(str) {
         <!-- <div>
           <pre id="the-answer" class="prettyprint">
 // no challenge loaded
-              </pre>
+          </pre>
         </div> -->
         <div>
           <div id="the-guesses" style="height: 75vh; width: 100vh; overflow-y: auto">
@@ -180,26 +253,15 @@ function reverstring(str) {
 
       var editor = ace.edit("editor");
 
-      editor.setTheme('ace/theme/chrome');
+      editor.setTheme('ace/theme/twilight');
       editor.setFontSize(15);
       editor.getSession().setMode('ace/mode/javascript');
       editor.getSession().setTabSize(2);
 
-      var query = read_snippet_query();
-      if (query) {
-        // https://prettier.io/blog/2018/05/27/1.13.0.html
-        editor.setValue(prettier.format(query, {
-          parser: "babylon",
-          plugins: prettierPlugins
-        }));
-        parsons_mode();
-      } else {
-        snippet = 'if (false) {\n  console.log("never");\n}';
-        editor.setValue(snippet);
-        change_mode();
-      };
+
 
     </script>
+
 </body>
 
 </html>

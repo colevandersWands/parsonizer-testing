@@ -7,9 +7,11 @@ function read_snippet_query() {
 
 function generate_permalink(snippet, map, viztool) {
   var encoded_snippet = map(snippet);
-  var permalink = "https://janke-learning.github.io/"+viztool+"/?snippet="+encoded_snippet;
+  var permalink = "https://janke-learning.github.io/" + viztool + "/?snippet=" + encoded_snippet;
   return permalink
 };
+
+const encodeQuery = encode_query;
 
 function encode_query(string_challenge) {
   var encoded = encodeURIComponent(string_challenge);
@@ -28,10 +30,10 @@ function decode_query(coded_challenge) {
 
 function gen_permalink() {
   var code = editor.getValue(); // change based on program
-  var url = generate_permalink(code, encode_query, 'parsonizer'); 
+  var url = generate_permalink(code, encode_query, 'tdd');
   var perma_display = document.getElementById("display-perma");
   perma_display.value = url;
-  copy_to_clipboard(url); 
+  copy_to_clipboard(url);
   alert('copied permalink');
 }
 
