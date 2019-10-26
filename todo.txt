@@ -1,0 +1,8 @@
+load from url
+  compatible with existing links
+  cache-interception
+
+forward/backwards navigation
+  no need to save their guesses
+
+more exercises

@@ -49,9 +49,26 @@ function save_guess() {
   var copy_guess = ul_guess.cloneNode(true);
   copy_guess.style = "list-style-type: none;";
 
-  var is_correct = parsons_instance.grader.grade().success;
+  var parsonsLog = parsons_instance.grader.grade();
 
-  guesses.push({ guess: copy_guess, success: is_correct });
+  studentGuess = parsonsLog.code;
+
+  if (studentGuess !== '') {
+    try {
+      const theirFunc = (new Function('return ' + studentGuess))()
+      if (testCases instanceof Array) {
+        evaluate(theirFunc, testCases)
+      } else {
+        evaluate(theirFunc)
+      }
+    } catch (err) {
+      console.log('%cCannot run tests: invalid function', 'color:red')
+    }
+  } else {
+    console.log('%cCannot run tests: no code to test', 'color:red')
+  }
+
+  guesses.push({ guess: copy_guess, success: parsonsLog.success });
 
   /*
     var indentations = [];

@@ -21,7 +21,7 @@
   <script src="./guesses-history/scripts.js"></script>
   <script src="./guesses-history/global-vars.js"></script>
 
-  <script src='./exercises/loader.js'></script>
+  <script src='./evaluate.js'></script>
 
   <!-- michiel! -->
   <!-- <script src='beautify.js'></script> -->
@@ -32,44 +32,51 @@
   <!-- <script src="./prettier/parser-babylon.js"></script> -->
   <script src="https://unpkg.com/prettier@1.13.0/parser-babylon.js"></script>
 
+  <style>
+    .parsonizer-button {
+      height: 45px;
+    }
+
+    .fake-button {
+      background-color: lightgray;
+      border: 1px solid black;
+      /* border-radius: 5px; */
+      /* color: #fff; */
+      margin-right: 10px;
+      padding: 10px 10px 10px 10px;
+    }
+  </style>
+
   <script>
+    var testCases;
+    var challengeCode;
+    var studentGuess = '';
+    var parsons_instance = {};
+
     const LastSlashIndex = window.location.href.lastIndexOf('/');
     var href = window.location.href.substr(0, LastSlashIndex);
 
     window.onload = () => {
+
       // this needs an overhaul, see tdd site
-      var query = read_snippet_query();
-      if (query) {
-        // https://prettier.io/blog/2018/05/27/1.13.0.html
-        editor.setValue(prettier.format(query, {
-          parser: "babylon",
-          plugins: prettierPlugins
-        }));
-        loader.cache[''] = query;
-        parsons_mode();
-      } else {
-        editor.setValue(loader.cache['']);
-        change_mode();
-      };
-
-
-      setTests('');
-
-      const prettyCode = prettier.format(
-        loader.cache[''],
-        {
-          parser: "babylon",
-          plugins: prettierPlugins
-        }
-      );
-
-      editor.setValue(prettyCode);
-      setTests(prettyCode)
+      // var query = read_snippet_query();
+      // if (query) {
+      //   // https://prettier.io/blog/2018/05/27/1.13.0.html
+      //   editor.setValue(prettier.format(query, {
+      //     parser: "babylon",
+      //     plugins: prettierPlugins
+      //   }));
+      //   loader.cache[''] = query;
+      //   parsons_mode();
+      // } else {
+      //   editor.setValue(loader.cache['']);
+      //   change_mode();
+      // };
+      loadFromURL(href)
     }
-    // window.addEventListener('popstate', function (e) {
-    //   loadFromURL(href);
-    //   runTests();
-    // });
+    window.addEventListener('popstate', function (e) {
+      loadFromURL(href);
+    });
     function setTests(code) {
       const prettyCode = prettier.format(
         code,
@@ -87,52 +94,66 @@
 </head>
 
 <body>
-
-  <!-- what you see -->
-  <div id='parsons-zone'>
-    <div id="sortableTrash" class="sortable-code"></div>
-    <div id="sortable" class="sortable-code"></div>
-    <div style="clear:both;"></div>
-  </div>
-  <div id="editor" style="position: relative; width: 800px; height: 400px;"></div>
-  <div id="control-panel"></div>
-  <div>
-
-    <div style='display:flex;flex-direction: row;justify-content:space-between'>
-      <!-- <div style='display:flex;flex-direction: row;'> -->
-      <div>
-        <br><br>
-        run it: <button onclick="open_in_pytut();">in python tutor</button> <button onclick="copy_it();">in
-          console</button> <br>
-        edit in: <button onclick="open_in('blockit');">block it</button> <Br>
-        study it with: <button onclick="open_in('spot');">spot</button>
-        <button onclick="open_in('shuffle');">shuffle</button>
-        <button onclick="open_in('linter');">linter</button>
-        <button onclick="open_in('flowviz');">flow viz</button>
-        <br>
-        <button id="gen-perma" onclick="gen_permalink();">generate permalink:</button>
-        <input id="display-perma"></input><br>
-      </div>
-      <div>
-        <!-- why no style -->
-        <pre><code id='test-cases' class="language-js"></code></pre>
-      </div>
+  <header style='display: flex; flex-direction: row; justify-content:space-between;'>
+    <!-- <button id="gen-perma" onclick="gen_permalink_href(href);">generate permalink:</button>
+    <input id="display-perma"></input> -->
+    <div style='display:flex;flex-direction: row;'>
+      <button class='parsonizer-button' onclick='change_mode()'>create an exercise</button>
+      <details id='exercise-details' style="padding-top:5px">
+        <summary class='fake-button'>select an exercise</summary>
+      </details>
     </div>
+    <span style='float:right;display:flex;flex-direction: row;' id="control-panel"></span>
+    <!-- <text>(open the console for more feedback)</text> -->
+  </header>
+  <script src="./exercises/index.js"></script>
+  <!-- <div style='display:flex;flex-direction: row;justify-content:space-between'> -->
+
+  <!-- parsons or editor -->
+  <div>
+    <div style='display:flex;flex-direction: row;justify-content:space-around;' id='parsons-zone'>
+      <div id="sortableTrash" class="sortable-code"></div>
+      <div id="sortable" class="sortable-code"></div>
+      <div style="clear:both;"></div>
+    </div>
+    <div id="editor" style="position: relative; width: 800px; height: 400px;display:none;"></div>
   </div>
-  <ul>
-    <li>paste your code in the textarea above and click the [parsonize your code] button to create a study
+  <div id='tests-div'>
+    <h3>Test Cases:</h3>
+    <!-- why no style -->
+    <pre><code id='test-cases' class="language-js"></code></pre>
+  </div>
+  <div id='comment-div'>
+    <h3>About This Exercise:</h3>
+    <pre style='font-size: 130%;' id='comment'></pre>
+  </div>
+  <!-- <div id="control-panel"></div> -->
+
+  <!-- <div>
+    <br><br>
+    run it: <button onclick="open_in_pytut();">in python tutor</button> <button onclick="copy_it();">in
+      console</button> <br>
+    edit in: <button onclick="open_in('blockit');">block it</button> <Br>
+    study it with: <button onclick="open_in('spot');">spot</button>
+    <button onclick="open_in('shuffle');">shuffle</button>
+    <button onclick="open_in('linter');">linter</button>
+    <button onclick="open_in('flowviz');">flow viz</button>
+    <br>
+  </div> -->
+  <!-- <ul>
+  <li>paste your code in the textarea above and click the [parsonize your code] button to create a study
       challenge
     </li>
-    <li>the first line needs to be all the way to the left </li>
-    <li>you can add un-necessary lines by typing '#distractor' after them </li>
-    <li>about parsons problems: <a target="_blank"
+  <li>the first line needs to be all the way to the left </li>
+  <li>you can add un-necessary lines by typing '#distractor' after them </li>
+  <li>about parsons problems: <a target="_blank"
         href="https://computinged.wordpress.com/2017/11/17/parsons-problems-have-same-learning-gains-as-writing-or-fixing-code-in-less-time-koli-calling-2017-preview/">all
         of the learning, less of the time time</a>.</li>
-    <li>new permalinks will open to the code in the textarea. If the textarea is empty, it will open to the
+  <li>new permalinks will open to the code in the textarea. If the textarea is empty, it will open to the
       current
       parsons problem</li>
-  </ul>
-  <hr>
+  </ul> -->
+  <!-- <hr>
   <h4>examples</h4>
   <div>
     <p><b>simple script -></b> drag them into the correct order</p>
@@ -189,11 +210,15 @@ function reverstring(str) {
   return re_stringed;
 };
           </pre>
-  </div>
+  </div> -->
   <br />
   <hr>
-  <p> <a href="https://github.com/janke-learning/parsonizer" target="_blank">parsonizer source code</a>, powered by <a
-      href="https://github.com/js-parsons/js-parsons" target="_blank"> js-parsons </a>
+  <!-- <p> <a href="https://github.com/janke-learning/parsonizer" target="_blank">parsonizer source code</a>, powered by <a
+      href="https://github.com/js-parsons/js-parsons" target="_blank"> js-parsons </a> <br> -->
+  <p> powered by <a href="https://github.com/js-parsons/js-parsons" target="_blank"> js-parsons.</a>
+    <a target="_blank"
+      href="https://computinged.wordpress.com/2017/11/17/parsons-problems-have-same-learning-gains-as-writing-or-fixing-code-in-less-time-koli-calling-2017-preview/">
+      <button>Read more about parsons problems</button></a>
     <br>
     <hr>
     <hr>
@@ -244,10 +269,13 @@ function reverstring(str) {
     <script src="./parsonizer/parsons-mode.js"></script>
 
     <script src="./linking/ctr-c.js"></script>
+    <script src="./linking/parse-challenge.js"></script>
     <script src="./linking/open-in-pytut.js"></script>
     <script src="./linking/permalinking.js"></script>
+    <script src="./linking/loader.js"></script>
+    <script src="./linking/load-from-url.js"></script>
 
-    <script src="./ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./ace/ace.js" type="text/javascript" charset="utf-8"></script> -->
 
     <script>
 

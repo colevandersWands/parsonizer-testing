@@ -1,8 +1,7 @@
-function reverseStringArrayMethods(str) {
-  const arrayOfLetters = str.split('');
-  const reversedArray = arrayOfLetters.reverse();
-  const joinedString = reversedArray.join('');
-  return joinedString;
+function reverseString(str) {
+  return str.split('').reverse().join('');
+  return str.splice('').reverse().join('');  // #distractor
+  return str.slice('').reverse().join('');  // #distractor
 }
 
 /* a simple solution to reversing a string using array methods
